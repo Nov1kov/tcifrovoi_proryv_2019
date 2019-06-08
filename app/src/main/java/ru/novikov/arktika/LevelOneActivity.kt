@@ -1,5 +1,6 @@
 package ru.novikov.arktika
 
+import java.util.Random
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -10,10 +11,15 @@ import android.widget.ImageView
 import com.airbnb.lottie.LottieAnimationView
 import kotlinx.android.synthetic.main.activity_fullscreen.*
 import ru.novikov.arktika.model.Barrel
-import kotlin.random.Random
 import com.bumptech.glide.Glide
+import ru.novikov.arktika.ui.login.StartLevelHint
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
+import android.view.animation.Animation
+import android.view.animation.BounceInterpolator
+import android.view.animation.ScaleAnimation
+
+
 
 
 /**
@@ -28,13 +34,13 @@ class LevelOneActivity : AppCompatActivity() {
         // Note that some of these constants are new as of API 16 (Jelly Bean)
         // and API 19 (KitKat). It is safe to use them, as they are inlined
         // at compile-time and do nothing on earlier devices.
-/*        fullscreen_content.systemUiVisibility =
+        root_layout.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LOW_PROFILE or
                     View.SYSTEM_UI_FLAG_FULLSCREEN or
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION*/
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
     private val mShowPart2Runnable = Runnable {
         // Delayed display of UI elements
@@ -66,6 +72,7 @@ class LevelOneActivity : AppCompatActivity() {
     private var currentPoints: Int = 0
 
     private lateinit var timeLeft: Date;
+    private val randomizer: Random = Random()
 
     private val barrells: MutableMap<Barrel, View> = mutableMapOf()
 
@@ -94,8 +101,8 @@ class LevelOneActivity : AppCompatActivity() {
 //        Glide.with(this).load(R.raw).into(imageViewTarget)
 
         Glide.with(this)
-            .asGif()
-            .load(ru.novikov.arktika.R.raw.waves)
+            .load(ru.novikov.arktika.R.drawable.background_1)
+            .centerCrop()
             .into(image_view);
 
         val calendar = Calendar.getInstance()
@@ -104,9 +111,15 @@ class LevelOneActivity : AppCompatActivity() {
 
         currentSeconds = timeLeftSeconds
         updatePoints()
-        updateTimer()
+
+        //startGameHint()
 
         startGame()
+    }
+
+    private fun startGameHint() {
+        val hint = StartLevelHint()
+        hint.show(supportFragmentManager, "startLevelHint")
     }
 
     private fun startGame() {
@@ -157,7 +170,7 @@ class LevelOneActivity : AppCompatActivity() {
             return
 
         for (i in 1..countOfNewBarrels){
-            val removeIndex = Random.nextInt(0, barrells.size)
+            val removeIndex = randomizer.nextInt(barrells.size)
             val barrel = barrells.keys.elementAt(removeIndex)
             removeItem(barrel)
         }
@@ -176,8 +189,9 @@ class LevelOneActivity : AppCompatActivity() {
     private fun createBarrel() {
         val barrel = Barrel(UUID.randomUUID().toString())
 
-        val view = createBarrelLottieView(barrel)
-        //createBarrelImageView(barrel)
+//        val view = createBarrelLottieView(barrel)
+        val view = createBarrelImageView(barrel)
+        scaleView(view, 0.0f, 1.0f)
 
         barrells.put(barrel, view)
     }
@@ -186,8 +200,8 @@ class LevelOneActivity : AppCompatActivity() {
         val itemHeight = resources.getDimensionPixelSize(R.dimen.barrel_height)
         val itemWidth = resources.getDimensionPixelSize(R.dimen.barrel_width);
 
-        val rndX = Random.nextInt(0, width - itemWidth)
-        val rndY = Random.nextInt(0, height - itemHeight)
+        val rndX = randomizer.nextInt(width - itemWidth)
+        val rndY = randomizer.nextInt(height - itemHeight)
 
         val text_view = LottieAnimationView(this)
 
@@ -215,8 +229,8 @@ class LevelOneActivity : AppCompatActivity() {
         val itemHeight = resources.getDimensionPixelSize(R.dimen.barrel_height)
         val itemWidth = resources.getDimensionPixelSize(R.dimen.barrel_width);
 
-        val rndX = Random.nextInt(0, width - itemWidth)
-        val rndY = Random.nextInt(0, height - itemHeight)
+        val rndX = randomizer.nextInt(width - itemWidth)
+        val rndY = randomizer.nextInt(height - itemHeight)
 
         val imageView = ImageView(this)
 
@@ -227,7 +241,7 @@ class LevelOneActivity : AppCompatActivity() {
         )
 
         Glide.with(this)
-            .load(R.drawable.barrel)
+            .load(R.drawable.barrel_01)
             .into(imageView);
 
         params.setMargins(rndX, rndY, 0, 0)
@@ -237,8 +251,19 @@ class LevelOneActivity : AppCompatActivity() {
             doneBarrel(it, barrel)
         })
         root_layout.addView(imageView)
-
         return imageView
+    }
+
+    fun scaleView(v: View, startScale: Float, endScale: Float) {
+        val anim = ScaleAnimation(
+            1f, 1f, // Start and end values for the X axis scaling
+            startScale, endScale, // Start and end values for the Y axis scaling
+            Animation.RELATIVE_TO_SELF, 0f, // Pivot point of X scaling
+            Animation.RELATIVE_TO_SELF, 1f
+        ) // Pivot point of Y scaling
+        anim.duration = 1000
+        anim.interpolator = BounceInterpolator()
+        v.startAnimation(anim)
     }
 
     private fun doneBarrel(view: View, barrel: Barrel) {
