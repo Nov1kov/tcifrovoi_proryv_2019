@@ -12,6 +12,7 @@
         <activity
                 android:name=".ui.login.StartActivity"
                 android:screenOrientation="landscape"
+                android:theme="@style/FullscreenTheme"
                 android:label="@string/title_activity_start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

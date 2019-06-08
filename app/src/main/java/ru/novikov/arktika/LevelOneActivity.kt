@@ -149,9 +149,11 @@ class LevelOneActivity : AppCompatActivity() {
     private fun startGame() {
         currentSeconds = timeLeftSeconds
         Timer().scheduleAtFixedRate(0, 1000) {
-            currentSeconds -= 1
-            gameStep(currentSeconds)
-            updateTimer()
+            if (!isDestroyed){
+                currentSeconds -= 1
+                gameStep(currentSeconds)
+                updateTimer()
+            }
         }
     }
 
