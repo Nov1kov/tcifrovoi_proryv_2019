@@ -1,17 +1,6 @@
 <resources>
     <string name="app_name">Arktika</string>
-
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_start">"Арктика "</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="start_game_hint">Здравствуй, храбрый капитан и старший помощник ледокола Россия. Ваша миссия совершить поход по северному морскому пути и решить сложные задачи. \nВперед навстречу приключениям!</string>
     <string name="start_game">Начать игру</string>
-    <string name="start_hint_text">Здесь какой то длинный текстЗдесь какой то длинный текст Здесь какой то длинный текстЗдесь какой то длинный текстЗдесь какой то длинный текстЗдесь какой то длинный текстЗдесь какой то длинный текстЗдесь какой то длинный текстЗдесь какой то длинный текстЗдесь какой то длинный текстЗдесь какой то длинный текстЗдесь какой то длинный текст</string>
 </resources>

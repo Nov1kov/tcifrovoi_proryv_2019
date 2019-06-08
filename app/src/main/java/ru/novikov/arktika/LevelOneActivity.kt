@@ -1,9 +1,9 @@
 package ru.novikov.arktika
 
+import android.content.Intent
 import java.util.Random
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.FrameLayout
@@ -12,16 +12,12 @@ import com.airbnb.lottie.LottieAnimationView
 import kotlinx.android.synthetic.main.activity_level.*
 import ru.novikov.arktika.model.Barrel
 import com.bumptech.glide.Glide
-import ru.novikov.arktika.ui.login.StartLevelHint
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
 import android.view.animation.ScaleAnimation
-import kotlinx.android.synthetic.main.activity_start.*
-import ru.novikov.arktika.ui.login.CompleteLevelDialog
-import ru.novikov.arktika.ui.login.DialogClosable
-import ru.novikov.arktika.ui.login.LevelCompleteCallBack
+import ru.novikov.arktika.ui.login.*
 
 
 /**
@@ -33,7 +29,7 @@ class LevelOneActivity : AppCompatActivity() {
     private var width: Int = 0
 
     private var countOfNewBarrels: Int = 2
-    private val timeLeftSeconds: Int = 10
+    private val timeLeftSeconds: Int = 25
     private val gameStepSeconds: Int = 2
     private val priceCount: Int = 10
     private var currentSeconds: Int = 0
@@ -97,14 +93,20 @@ class LevelOneActivity : AppCompatActivity() {
     }
 
     private fun goNextLevel() {
-        // todo
+        val intent = Intent(this, MapActivity::class.java)
+        intent.putExtra("MAP_ACTIVITY_STAGE_KEY", 2)
+        startActivity(intent)
     }
 
     private fun showLevelHint() {
         val hint = StartLevelHint()
         hint.isCancelable = false
-        hint.callback = object : DialogClosable {
-            override fun onDismiss() {
+        hint.callback = object : StartMissionCallBackDialog {
+            override fun back() {
+                finish()
+            }
+
+            override fun start() {
                 startGame()
             }
         }
@@ -112,6 +114,7 @@ class LevelOneActivity : AppCompatActivity() {
     }
 
     private fun startGame() {
+        currentScore = 0
         currentSeconds = timeLeftSeconds
         task = Timer().scheduleAtFixedRate(0, 1000) {
             runOnUiThread {

@@ -37,7 +37,6 @@ class CompleteLevelDialog : DialogFragment(), OnClickListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog.setTitle("Title!")
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.getWindow().setBackgroundDrawable( ColorDrawable(Color.TRANSPARENT))
 
@@ -48,7 +47,7 @@ class CompleteLevelDialog : DialogFragment(), OnClickListener {
             dismiss()
         }
         val again = v.findViewById<View>(R.id.again_button)
-        start.setOnClickListener {
+        again.setOnClickListener {
             callback?.onClickAgain()
             dismiss()
         }
