@@ -11,16 +11,23 @@ import android.widget.Button
 import androidx.fragment.app.DialogFragment
 import ru.novikov.arktika.R
 
-class StartLevelHint : DialogFragment(), OnClickListener {
+interface DialogClosable{
+    fun onDismiss()
+}
+
+open class StartLevelHint : DialogFragment(), OnClickListener {
 
     internal val LOG_TAG = "StartLevelHint"
+
+    var callback: DialogClosable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.setTitle("Title!")
         val v = inflater.inflate(R.layout.start_hint_fragment, null)
-/*        v.findViewById(R.id.btnYes).setOnClickListener(this)
-        v.findViewById(R.id.btnNo).setOnClickListener(this)
-        v.findViewById(R.id.btnMaybe).setOnClickListener(this)*/
+        val start = v.findViewById<View>(R.id.start)
+        start.setOnClickListener {
+            dismiss()
+        }
         return v
     }
 
@@ -29,13 +36,15 @@ class StartLevelHint : DialogFragment(), OnClickListener {
         dismiss()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        callback = null
+    }
+
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         Log.d(LOG_TAG, "Dialog 1: onDismiss")
-    }
-
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-        Log.d(LOG_TAG, "Dialog 1: onCancel")
+        callback?.onDismiss()
+        callback = null
     }
 }

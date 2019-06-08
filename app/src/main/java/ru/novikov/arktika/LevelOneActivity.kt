@@ -1,5 +1,6 @@
 package ru.novikov.arktika
 
+import android.app.Dialog
 import java.util.Random
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,8 +19,7 @@ import kotlin.concurrent.scheduleAtFixedRate
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
 import android.view.animation.ScaleAnimation
-
-
+import ru.novikov.arktika.ui.login.DialogClosable
 
 
 /**
@@ -65,7 +65,7 @@ class LevelOneActivity : AppCompatActivity() {
     private var width: Int = 0
 
     private var countOfNewBarrels: Int = 2
-    private var timeLeftSeconds: Int = 20
+    private val timeLeftSeconds: Int = 20
     private val gameStepSeconds: Int = 2
     private val priceCount: Int = 10
     private var currentSeconds: Int = 20
@@ -109,20 +109,23 @@ class LevelOneActivity : AppCompatActivity() {
         calendar.add(Calendar.SECOND, 30)
         timeLeft = calendar.time
 
-        currentSeconds = timeLeftSeconds
         updatePoints()
-
-        //startGameHint()
-
-        startGame()
+        showLevelHint()
     }
 
-    private fun startGameHint() {
+    private fun showLevelHint() {
         val hint = StartLevelHint()
+        hint.isCancelable = false
+        hint.callback = object : DialogClosable {
+            override fun onDismiss() {
+                startGame()
+            }
+        }
         hint.show(supportFragmentManager, "startLevelHint")
     }
 
     private fun startGame() {
+        currentSeconds = timeLeftSeconds
         Timer().scheduleAtFixedRate(0, 1000) {
             currentSeconds -= 1
             gameStep(currentSeconds)
