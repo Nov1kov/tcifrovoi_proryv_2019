@@ -1,4 +1,4 @@
-package ru.novikov.arktika.ui.login
+package ru.novikov.arktika.ui
 
 import android.content.DialogInterface
 import android.graphics.Color
@@ -21,7 +21,6 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import ru.novikov.arktika.R
-import java.sql.Time
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -40,7 +39,7 @@ open class StartLevelHint : DialogFragment(), OnClickListener {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.getWindow().setBackgroundDrawable( ColorDrawable(Color.TRANSPARENT))
 
-        val v = inflater.inflate(R.layout.start_hint_fragment, null)
+        val v = inflater.inflate(R.layout.mission_1_hint_fragment, null)
         val start = v.findViewById<View>(R.id.go_button)
         start.setOnClickListener {
             callback?.start()

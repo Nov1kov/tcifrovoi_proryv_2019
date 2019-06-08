@@ -1,4 +1,4 @@
-package ru.novikov.arktika.ui.login
+package ru.novikov.arktika.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_start.*
-import ru.novikov.arktika.LevelOneActivity
 import ru.novikov.arktika.R
 
 class StartActivity : AppCompatActivity() {
@@ -34,8 +33,9 @@ class StartActivity : AppCompatActivity() {
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
         start.setOnClickListener {
-            val intent = Intent(this, LevelOneActivity::class.java)
-            startActivity(intent)
+            showStartGameExplainDialog()
+//            val intent = Intent(this, LevelOneActivity::class.java)
+//            startActivity(intent)
             //overridePendingTransition(android.R.anim.fade_out, android.R.anim.fade_in);
         }
 
@@ -43,5 +43,26 @@ class StartActivity : AppCompatActivity() {
             .load(ru.novikov.arktika.R.drawable.start_screen_background)
             .centerCrop()
             .into(background);
+    }
+
+    fun showStartGameExplainDialog(){
+        val hint = StartGameHint()
+        hint.isCancelable = false
+        hint.callback = object : StartMissionCallBackDialog {
+            override fun back() {
+
+            }
+
+            override fun start() {
+                startGame()
+            }
+        }
+        hint.show(supportFragmentManager, "StartLevelHint")
+    }
+
+    private fun startGame() {
+        val intent = Intent(this, MapActivity::class.java)
+        intent.putExtra("MAP_ACTIVITY_STAGE_KEY", 1)
+        startActivity(intent)
     }
 }

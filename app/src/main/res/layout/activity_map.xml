@@ -21,7 +21,7 @@
 
         <ImageView
                 android:id="@+id/start"
-                android:src="@drawable/play"
+                android:src="@drawable/let_go_button"
                 android:layout_width="250dp"
                 android:adjustViewBounds="true"
                 android:layout_height="wrap_content"

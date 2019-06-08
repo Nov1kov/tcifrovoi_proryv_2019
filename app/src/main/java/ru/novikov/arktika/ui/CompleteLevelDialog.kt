@@ -1,4 +1,4 @@
-package ru.novikov.arktika.ui.login
+package ru.novikov.arktika.ui
 
 import android.content.DialogInterface
 import android.graphics.Color

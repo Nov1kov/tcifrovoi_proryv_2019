@@ -1,4 +1,4 @@
-package ru.novikov.arktika
+package ru.novikov.arktika.ui
 
 import android.content.Intent
 import java.util.Random
@@ -17,11 +17,9 @@ import kotlin.concurrent.scheduleAtFixedRate
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
 import android.view.animation.ScaleAnimation
-import ru.novikov.arktika.ui.login.*
 import android.media.MediaPlayer
-import android.R.attr.start
-import java.lang.reflect.Array.getLength
 import android.content.res.AssetFileDescriptor
+import ru.novikov.arktika.R
 import java.io.IOException
 
 
@@ -67,7 +65,7 @@ class LevelOneActivity : AppCompatActivity() {
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
         Glide.with(this)
-            .load(ru.novikov.arktika.R.drawable.background_1)
+            .load(R.drawable.background_1)
             .centerCrop()
             .into(image_view);
 
