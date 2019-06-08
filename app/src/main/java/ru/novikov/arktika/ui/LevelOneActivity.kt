@@ -14,13 +14,12 @@ import ru.novikov.arktika.model.Barrel
 import com.bumptech.glide.Glide
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
-import android.view.animation.Animation
-import android.view.animation.BounceInterpolator
-import android.view.animation.ScaleAnimation
 import android.media.MediaPlayer
 import android.content.res.AssetFileDescriptor
+import android.view.animation.*
 import ru.novikov.arktika.R
 import java.io.IOException
+import java.text.DecimalFormat
 
 
 /**
@@ -116,8 +115,13 @@ class LevelOneActivity : AppCompatActivity() {
     }
 
     private fun startGame() {
+        for (view in barrells.values){
+            root_layout.removeView(view)
+        }
+        barrells.clear()
         currentScore = 0
         currentSeconds = timeLeftSeconds
+        updateTimer()
         task = Timer().scheduleAtFixedRate(0, 1000) {
             runOnUiThread {
                 if (!isDestroyed) {
@@ -143,7 +147,7 @@ class LevelOneActivity : AppCompatActivity() {
     }
 
     private fun updateTimer() {
-        timer_text.text = currentSeconds.toString()
+        timer_text.text = "00:%02d".format(currentSeconds)
     }
 
     private fun generateBarrels() {
@@ -180,6 +184,8 @@ class LevelOneActivity : AppCompatActivity() {
             val removeIndex = randomizer.nextInt(barrells.size)
             val barrel = barrells.keys.elementAt(removeIndex)
             removeItem(barrel)
+            if (barrells.isEmpty())
+                return
         }
     }
 
@@ -191,6 +197,23 @@ class LevelOneActivity : AppCompatActivity() {
             root_layout.removeView(view)
         }
         barrells.remove(barrel)
+    }
+
+    private fun removeViewWithAnimation(findView: View) {
+        val anim = scaleView(findView, 1.0f, 0.0f)
+        anim.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                root_layout.removeView(findView)
+            }
+
+            override fun onAnimationStart(animation: Animation?) {
+
+            }
+        })
     }
 
     private fun createBarrel() {
@@ -261,23 +284,26 @@ class LevelOneActivity : AppCompatActivity() {
         return imageView
     }
 
-    fun scaleView(v: View, startScale: Float, endScale: Float) {
+    fun scaleView(v: View, startScale: Float, endScale: Float) : Animation {
+        val isDownScale = (endScale == 0.0f)
         val anim = ScaleAnimation(
-            1f, 1f, // Start and end values for the X axis scaling
+            startScale, endScale, // Start and end values for the X axis scaling
             startScale, endScale, // Start and end values for the Y axis scaling
-            Animation.RELATIVE_TO_SELF, 0f, // Pivot point of X scaling
-            Animation.RELATIVE_TO_SELF, 1f
+            Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
+            Animation.RELATIVE_TO_SELF, 0.5f
         ) // Pivot point of Y scaling
-        anim.duration = 1000
-        anim.interpolator = BounceInterpolator()
+        anim.duration = if (isDownScale) 300 else 1000
+        anim.interpolator = if (isDownScale) AccelerateDecelerateInterpolator() else BounceInterpolator()
         v.startAnimation(anim)
+        return anim
     }
 
     private fun doneBarrel(view: View, barrel: Barrel) {
         barrel.done = true
         currentScore += priceCount
         updatePoints()
-        removeItem(barrel, view)
+        barrells.remove(barrel)
+        removeViewWithAnimation(view)
         soundEffect()
     }
 
