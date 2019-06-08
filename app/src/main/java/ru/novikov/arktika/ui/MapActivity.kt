@@ -17,7 +17,6 @@ class MapActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_map)
 
-        stageLevel = intent.getIntExtra("MAP_ACTIVITY_STAGE_KEY", 0)
 
         container.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LOW_PROFILE or
@@ -27,6 +26,7 @@ class MapActivity : AppCompatActivity() {
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
+
         start.setOnClickListener {
             if (stageLevel == 1){
                 val intent = Intent(this, LevelOneActivity::class.java)
@@ -35,17 +35,41 @@ class MapActivity : AppCompatActivity() {
 
             }
         }
+        stageLevel = intent.getIntExtra("MAP_ACTIVITY_STAGE_KEY", 0)
+        drawBackgorund()
+    }
+
+    private fun drawBackgorund() {
 
         val drawableBackgroundRes: Int
-        if (stageLevel == 1){
-            drawableBackgroundRes = ru.novikov.arktika.R.drawable.map_stage_1
-        }else{
-            drawableBackgroundRes = ru.novikov.arktika.R.drawable.map_stage_2
+        if (stageLevel == 1) {
+            drawableBackgroundRes = R.drawable.map_stage_1
+        } else {
+            drawableBackgroundRes = R.drawable.map_stage_2
         }
 
         Glide.with(this)
             .load(drawableBackgroundRes)
             .centerCrop()
             .into(background);
+    }
+
+    override fun onResume() {
+        super.onResume()
+        container.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                    View.SYSTEM_UI_FLAG_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent != null) {
+            stageLevel = intent.getIntExtra("MAP_ACTIVITY_STAGE_KEY", 0)
+        }
+        drawBackgorund()
     }
 }

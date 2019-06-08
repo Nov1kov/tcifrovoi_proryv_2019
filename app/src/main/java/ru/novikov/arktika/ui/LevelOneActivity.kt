@@ -19,6 +19,7 @@ import android.content.res.AssetFileDescriptor
 import android.view.animation.*
 import ru.novikov.arktika.R
 import java.io.IOException
+import java.lang.Exception
 import java.text.DecimalFormat
 
 
@@ -31,7 +32,7 @@ class LevelOneActivity : AppCompatActivity() {
     private var width: Int = 0
 
     private var countOfNewBarrels: Int = 2
-    private val timeLeftSeconds: Int = 25
+    private val timeLeftSeconds: Int = 3
     private val gameStepSeconds: Int = 2
     private val priceCount: Int = 10
     private var currentSeconds: Int = 0
@@ -74,6 +75,22 @@ class LevelOneActivity : AppCompatActivity() {
         showLevelHint()
     }
 
+    private var isFailtShowDialog: Boolean = false
+
+    override fun onResume() {
+        super.onResume()
+        if (isFailtShowDialog){
+            completeLevelHint()
+        }
+        root_layout.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LOW_PROFILE or
+                    View.SYSTEM_UI_FLAG_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+    }
+
     private fun completeLevelHint() {
         val dialog = CompleteLevelDialog()
         dialog.maxScore = timeLeftSeconds / gameStepSeconds * countOfNewBarrels * priceCount
@@ -90,13 +107,19 @@ class LevelOneActivity : AppCompatActivity() {
 
         }
         dialog.isCancelable = false
-        dialog.show(supportFragmentManager, "CompleteLevelDialog")
+        try {
+            dialog.show(supportFragmentManager, "CompleteLevelDialog")
+        }catch (e : Exception){
+            e.printStackTrace()
+            isFailtShowDialog = true
+        }
     }
 
     private fun goNextLevel() {
         val intent = Intent(this, MapActivity::class.java)
         intent.putExtra("MAP_ACTIVITY_STAGE_KEY", 2)
         startActivity(intent)
+        finish()
     }
 
     private fun showLevelHint() {

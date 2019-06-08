@@ -20,54 +20,49 @@
 
     <TextView
             tools:text="102"
-            android:textSize="30dp"
+            android:textSize="42dp"
             app:fontFamily="@font/marvel_family"
+            android:gravity="right"
             android:textColor="@color/colorDialogText"
             android:id="@+id/score_text"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="35dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/background"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2"/>
+            android:layout_marginBottom="60dp" app:layout_constraintStart_toEndOf="@+id/imageView2"
+            android:layout_marginStart="8dp"/>
 
     <ImageView
             android:src="@drawable/bochkablue_01"
             android:adjustViewBounds="true"
-            android:layout_width="32dp"
+            android:layout_width="56dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="50dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="50dp"
-            android:id="@+id/imageView2"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="50dp" android:layout_marginStart="50dp"/>
 
-
-    <LinearLayout
-            android:id="@+id/stars"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:layout_width="@dimen/level_comlete_dialog_size_width"
-            android:orientation="horizontal"
-            android:layout_height="60dp"
-            app:layout_constraintEnd_toEndOf="parent"
+    <ImageView
+            android:src="@drawable/starblue_01"
+            android:adjustViewBounds="true"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/background" app:layout_constraintTop_toTopOf="@+id/background">
-
-
-    </LinearLayout>
+            android:layout_marginBottom="60dp"
+            app:layout_constraintBottom_toBottomOf="@+id/background"
+            android:id="@+id/imageView2" android:layout_marginStart="50dp"/>
 
     <TextView
             tools:text="102"
-            android:textSize="30dp"
+            android:textSize="42dp"
+            android:gravity="right"
             android:textColor="@color/colorDialogText"
             app:fontFamily="@font/marvel_family"
             android:id="@+id/barrels_count_text"
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="40dp" android:layout_marginEnd="30dp"/>
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="45dp" android:layout_marginEnd="35dp"/>
 
     <ImageView
             android:src="@drawable/complete"

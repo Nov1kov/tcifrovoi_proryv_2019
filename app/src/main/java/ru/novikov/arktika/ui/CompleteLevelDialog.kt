@@ -58,24 +58,6 @@ class CompleteLevelDialog : DialogFragment(), OnClickListener {
         val barrels = v.findViewById<TextView>(R.id.barrels_count_text)
         barrels.text = barrelsCount.toString()
 
-        val starsCount = currentScore * 5 / maxScore
-        val startContainer = v.findViewById<ViewGroup>(R.id.stars)
-        for (i in 1..5){
-
-            val starImageView = ImageView(context)
-            if (i <= starsCount){
-                starImageView.setImageResource(R.drawable.starblue_01)
-            }else{
-                starImageView.setImageResource(R.drawable.starwhite_01)
-            }
-            starImageView.adjustViewBounds = true
-            val width = resources.getDimensionPixelSize(R.dimen.stars_size)
-            val layoutParams = LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT)
-            starImageView.layoutParams = layoutParams
-
-            startContainer.addView(starImageView)
-        }
-
         return v
     }
 
