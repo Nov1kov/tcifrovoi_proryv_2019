@@ -18,6 +18,11 @@ import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
 import android.view.animation.ScaleAnimation
 import ru.novikov.arktika.ui.login.*
+import android.media.MediaPlayer
+import android.R.attr.start
+import java.lang.reflect.Array.getLength
+import android.content.res.AssetFileDescriptor
+import java.io.IOException
 
 
 /**
@@ -41,6 +46,8 @@ class LevelOneActivity : AppCompatActivity() {
     private val barrells: MutableMap<Barrel, View> = mutableMapOf()
 
     private lateinit var task: TimerTask
+
+    private lateinit var mp: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +75,8 @@ class LevelOneActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.SECOND, 30)
         timeLeft = calendar.time
+
+        mp = MediaPlayer()
 
         updatePoints()
         showLevelHint()
@@ -148,6 +157,26 @@ class LevelOneActivity : AppCompatActivity() {
         for (i in 1..countOfNewBarrels){
             createBarrel()
         }
+    }
+
+    fun soundEffect(){
+        if (mp.isPlaying) {
+            mp.stop()
+        }
+
+        try {
+            mp.reset()
+            val afd: AssetFileDescriptor
+            afd = assets.openFd("barrel_click.mp3")
+            mp.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+            mp.prepare()
+            mp.start()
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
     }
 
     private fun removeBarrels(){
@@ -256,6 +285,7 @@ class LevelOneActivity : AppCompatActivity() {
         currentScore += priceCount
         updatePoints()
         removeItem(barrel, view)
+        soundEffect()
     }
 
     private fun updatePoints() {
