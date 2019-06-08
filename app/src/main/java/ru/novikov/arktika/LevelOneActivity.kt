@@ -18,6 +18,7 @@ import kotlin.concurrent.scheduleAtFixedRate
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
 import android.view.animation.ScaleAnimation
+import kotlinx.android.synthetic.main.activity_start.*
 import ru.novikov.arktika.ui.login.CompleteLevelDialog
 import ru.novikov.arktika.ui.login.DialogClosable
 import ru.novikov.arktika.ui.login.LevelCompleteCallBack
@@ -28,13 +29,33 @@ import ru.novikov.arktika.ui.login.LevelCompleteCallBack
  * status bar and navigation/system bar) with user interaction.
  */
 class LevelOneActivity : AppCompatActivity() {
-    private val mHideHandler = Handler()
-    private val mHidePart2Runnable = Runnable {
-        // Delayed removal of status and navigation bar
+    private var height: Int = 0
+    private var width: Int = 0
 
-        // Note that some of these constants are new as of API 16 (Jelly Bean)
-        // and API 19 (KitKat). It is safe to use them, as they are inlined
-        // at compile-time and do nothing on earlier devices.
+    private var countOfNewBarrels: Int = 2
+    private val timeLeftSeconds: Int = 10
+    private val gameStepSeconds: Int = 2
+    private val priceCount: Int = 10
+    private var currentSeconds: Int = 0
+    private var currentScore: Int = 0
+
+    private lateinit var timeLeft: Date;
+    private val randomizer: Random = Random()
+
+    private val barrells: MutableMap<Barrel, View> = mutableMapOf()
+
+    private lateinit var task: TimerTask
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContentView(R.layout.activity_level)
+
+        val displayMetrics = DisplayMetrics()
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics)
+        height = displayMetrics.heightPixels
+        width = displayMetrics.widthPixels
+
         root_layout.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LOW_PROFILE or
                     View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -42,64 +63,6 @@ class LevelOneActivity : AppCompatActivity() {
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    }
-    private val mShowPart2Runnable = Runnable {
-        // Delayed display of UI elements
-        supportActionBar?.show()
-//        fullscreen_content_controls.visibility = View.VISIBLE
-    }
-    private var mVisible: Boolean = false
-    private val mHideRunnable = Runnable { hide() }
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private val mDelayHideTouchListener = View.OnTouchListener { _, _ ->
-        if (AUTO_HIDE) {
-            //delayedHide(AUTO_HIDE_DELAY_MILLIS)
-        }
-        false
-    }
-
-    private var height: Int = 0
-    private var width: Int = 0
-
-    private var countOfNewBarrels: Int = 2
-    private val timeLeftSeconds: Int = 20
-    private val gameStepSeconds: Int = 2
-    private val priceCount: Int = 10
-    private var currentSeconds: Int = 20
-    private var currentPoints: Int = 0
-
-    private lateinit var timeLeft: Date;
-    private val randomizer: Random = Random()
-
-    private val barrells: MutableMap<Barrel, View> = mutableMapOf()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_level)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        mVisible = true
-
-        val displayMetrics = DisplayMetrics()
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics)
-        height = displayMetrics.heightPixels
-        width = displayMetrics.widthPixels
-
-        // Set up the user interaction to manually show or hide the system UI.
-        //fullscreen_content.setOnClickListener { toggle() }
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-//        dummy_button.setOnTouchListener(mDelayHideTouchListener)
-
-        //val imageViewTarget = GlideDrawableImageViewTarget(image_view)
-//        Glide.with(this).load(R.raw).into(imageViewTarget)
 
         Glide.with(this)
             .load(ru.novikov.arktika.R.drawable.background_1)
@@ -111,12 +74,14 @@ class LevelOneActivity : AppCompatActivity() {
         timeLeft = calendar.time
 
         updatePoints()
-//        showLevelHint()
-        completeLevelHint()
+        showLevelHint()
     }
 
     private fun completeLevelHint() {
         val dialog = CompleteLevelDialog()
+        dialog.maxScore = timeLeftSeconds / gameStepSeconds * countOfNewBarrels * priceCount
+        dialog.currentScore = currentScore
+        dialog.barrelsCount = currentScore / priceCount
         dialog.callback = object : LevelCompleteCallBack{
             override fun onClickGo() {
                 goNextLevel()
@@ -148,42 +113,32 @@ class LevelOneActivity : AppCompatActivity() {
 
     private fun startGame() {
         currentSeconds = timeLeftSeconds
-        Timer().scheduleAtFixedRate(0, 1000) {
-            if (!isDestroyed){
-                currentSeconds -= 1
-                gameStep(currentSeconds)
-                updateTimer()
+        task = Timer().scheduleAtFixedRate(0, 1000) {
+            runOnUiThread {
+                if (!isDestroyed) {
+                    currentSeconds -= 1
+                    gameStep(currentSeconds)
+                    updateTimer()
+                }
             }
         }
     }
 
     private fun gameStep(currentSeconds: Int) {
         if (currentSeconds <= 0){
-            // lose
+            task.cancel()
+            completeLevelHint()
             return
         }
 
         if (currentSeconds % gameStepSeconds == 0){
-            runOnUiThread {
-                removeBarrels()
-                generateBarrels()
-            }
+            removeBarrels()
+            generateBarrels()
         }
     }
 
     private fun updateTimer() {
-        runOnUiThread {
-            timer_text.text = currentSeconds.toString()
-        }
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100)
+        timer_text.text = currentSeconds.toString()
     }
 
     private fun generateBarrels(){
@@ -295,72 +250,12 @@ class LevelOneActivity : AppCompatActivity() {
 
     private fun doneBarrel(view: View, barrel: Barrel) {
         barrel.done = true
-        currentPoints += priceCount
+        currentScore += priceCount
         updatePoints()
         removeItem(barrel, view)
     }
 
     private fun updatePoints() {
-        points_text.text = currentPoints.toString()
-    }
-
-    private fun toggle() {
-        if (mVisible) {
-            hide()
-        } else {
-            show()
-        }
-    }
-
-    private fun hide() {
-        // Hide UI first~
-        supportActionBar?.hide()
-//        fullscreen_content_controls.visibility = View.GONE
-        mVisible = false
-
-        // Schedule a runnable to remove the status and navigation bar after a delay
-        mHideHandler.removeCallbacks(mShowPart2Runnable)
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY.toLong())
-    }
-
-    private fun show() {
-        // Show the system bar
-//        fullscreen_content.systemUiVisibility =
-//            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-//                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        mVisible = true
-
-        // Schedule a runnable to display UI elements after a delay
-        mHideHandler.removeCallbacks(mHidePart2Runnable)
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY.toLong())
-    }
-
-    /**
-     * Schedules a call to hide() in [delayMillis], canceling any
-     * previously scheduled calls.
-     */
-    private fun delayedHide(delayMillis: Int) {
-        mHideHandler.removeCallbacks(mHideRunnable)
-        mHideHandler.postDelayed(mHideRunnable, delayMillis.toLong())
-    }
-
-    companion object {
-        /**
-         * Whether or not the system UI should be auto-hidden after
-         * [AUTO_HIDE_DELAY_MILLIS] milliseconds.
-         */
-        private val AUTO_HIDE = true
-
-        /**
-         * If [AUTO_HIDE] is set, the number of milliseconds to wait after
-         * user interaction before hiding the system UI.
-         */
-        private val AUTO_HIDE_DELAY_MILLIS = 3000
-
-        /**
-         * Some older devices needs a small delay between UI widget updates
-         * and a change of the status and navigation bar.
-         */
-        private val UI_ANIMATION_DELAY = 300
+        points_text.text = currentScore.toString()
     }
 }

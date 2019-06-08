@@ -4,13 +4,10 @@
              xmlns:app="http://schemas.android.com/apk/res-auto"
              android:id="@+id/root_layout"
              android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:fitsSystemWindows="true"
-             tools:context=".LevelOneActivity">
+             android:layout_height="match_parent">
 
     <ImageView
             android:id="@+id/image_view"
-            android:fitsSystemWindows="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
@@ -32,13 +29,5 @@
             tools:text="100"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
-    <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 android:fitsSystemWindows="true">
-
-    </FrameLayout>
 
 </FrameLayout>

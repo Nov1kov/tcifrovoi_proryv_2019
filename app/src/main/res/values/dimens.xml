@@ -8,4 +8,5 @@
     <dimen name="controls_text_size">70sp</dimen>
     <dimen name="level_comlete_dialog_size_width">250dp</dimen>
     <dimen name="level_comlete_dialog_size_height">260dp</dimen>
+    <dimen name="stars_size">40dp</dimen>
 </resources>

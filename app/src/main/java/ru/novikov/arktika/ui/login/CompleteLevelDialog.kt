@@ -11,6 +11,9 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import ru.novikov.arktika.R
 
@@ -25,6 +28,9 @@ class CompleteLevelDialog : DialogFragment(), OnClickListener {
     internal val LOG_TAG = "StartLevelHint"
 
     var callback: LevelCompleteCallBack? = null
+    var maxScore: Int = 1
+    var currentScore: Int = 0
+    var barrelsCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +52,31 @@ class CompleteLevelDialog : DialogFragment(), OnClickListener {
             callback?.onClickAgain()
             dismiss()
         }
+
+        val score = v.findViewById<TextView>(R.id.score_text)
+        score.text = currentScore.toString()
+
+        val barrels = v.findViewById<TextView>(R.id.barrels_count_text)
+        barrels.text = barrelsCount.toString()
+
+        val starsCount = currentScore * 5 / maxScore
+        val startContainer = v.findViewById<ViewGroup>(R.id.stars)
+        for (i in 1..5){
+
+            val starImageView = ImageView(context)
+            if (i <= starsCount){
+                starImageView.setImageResource(R.drawable.starblue_01)
+            }else{
+                starImageView.setImageResource(R.drawable.starwhite_01)
+            }
+            starImageView.adjustViewBounds = true
+            val width = resources.getDimensionPixelSize(R.dimen.stars_size)
+            val layoutParams = LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.WRAP_CONTENT)
+            starImageView.layoutParams = layoutParams
+
+            startContainer.addView(starImageView)
+        }
+
         return v
     }
 

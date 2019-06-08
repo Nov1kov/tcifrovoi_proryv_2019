@@ -18,6 +18,57 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="12dp"/>
 
+    <TextView
+            tools:text="102"
+            android:textSize="30dp"
+            app:fontFamily="@font/marvel_family"
+            android:textColor="@color/colorDialogText"
+            android:id="@+id/score_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/background"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"/>
+
+    <ImageView
+            android:src="@drawable/bochkablue_01"
+            android:adjustViewBounds="true"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="50dp"
+            android:id="@+id/imageView2"/>
+
+
+    <LinearLayout
+            android:id="@+id/stars"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_width="@dimen/level_comlete_dialog_size_width"
+            android:orientation="horizontal"
+            android:layout_height="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/background" app:layout_constraintTop_toTopOf="@+id/background">
+
+
+    </LinearLayout>
+
+    <TextView
+            tools:text="102"
+            android:textSize="30dp"
+            android:textColor="@color/colorDialogText"
+            app:fontFamily="@font/marvel_family"
+            android:id="@+id/barrels_count_text"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="40dp" android:layout_marginEnd="30dp"/>
+
     <ImageView
             android:src="@drawable/complete"
             android:adjustViewBounds="true"
