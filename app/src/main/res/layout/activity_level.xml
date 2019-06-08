@@ -5,11 +5,12 @@
              android:id="@+id/root_layout"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:background="#0099cc"
+             android:fitsSystemWindows="true"
              tools:context=".LevelOneActivity">
 
     <ImageView
             android:id="@+id/image_view"
+            android:fitsSystemWindows="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

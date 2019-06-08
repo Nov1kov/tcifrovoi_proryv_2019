@@ -1,6 +1,5 @@
 package ru.novikov.arktika
 
-import android.app.Dialog
 import java.util.Random
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +9,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import com.airbnb.lottie.LottieAnimationView
-import kotlinx.android.synthetic.main.activity_fullscreen.*
+import kotlinx.android.synthetic.main.activity_level.*
 import ru.novikov.arktika.model.Barrel
 import com.bumptech.glide.Glide
 import ru.novikov.arktika.ui.login.StartLevelHint
@@ -19,7 +18,9 @@ import kotlin.concurrent.scheduleAtFixedRate
 import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
 import android.view.animation.ScaleAnimation
+import ru.novikov.arktika.ui.login.CompleteLevelDialog
 import ru.novikov.arktika.ui.login.DialogClosable
+import ru.novikov.arktika.ui.login.LevelCompleteCallBack
 
 
 /**
@@ -79,7 +80,7 @@ class LevelOneActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_fullscreen)
+        setContentView(R.layout.activity_level)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         mVisible = true
@@ -110,7 +111,28 @@ class LevelOneActivity : AppCompatActivity() {
         timeLeft = calendar.time
 
         updatePoints()
-        showLevelHint()
+//        showLevelHint()
+        completeLevelHint()
+    }
+
+    private fun completeLevelHint() {
+        val dialog = CompleteLevelDialog()
+        dialog.callback = object : LevelCompleteCallBack{
+            override fun onClickGo() {
+                goNextLevel()
+            }
+
+            override fun onClickAgain() {
+                startGame()
+            }
+
+        }
+        dialog.isCancelable = false
+        dialog.show(supportFragmentManager, "CompleteLevelDialog")
+    }
+
+    private fun goNextLevel() {
+        // todo
     }
 
     private fun showLevelHint() {
@@ -121,7 +143,7 @@ class LevelOneActivity : AppCompatActivity() {
                 startGame()
             }
         }
-        hint.show(supportFragmentManager, "startLevelHint")
+        hint.show(supportFragmentManager, "StartLevelHint")
     }
 
     private fun startGame() {
