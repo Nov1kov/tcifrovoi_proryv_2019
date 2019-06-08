@@ -40,7 +40,6 @@ class LevelOneActivity : AppCompatActivity() {
     private var currentSeconds: Int = 0
     private var currentScore: Int = 0
 
-    private lateinit var timeLeft: Date;
     private val randomizer: Random = Random()
 
     private val barrells: MutableMap<Barrel, View> = mutableMapOf()
@@ -72,10 +71,6 @@ class LevelOneActivity : AppCompatActivity() {
             .centerCrop()
             .into(image_view);
 
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.SECOND, 30)
-        timeLeft = calendar.time
-
         mp = MediaPlayer()
 
         updatePoints()
@@ -87,7 +82,7 @@ class LevelOneActivity : AppCompatActivity() {
         dialog.maxScore = timeLeftSeconds / gameStepSeconds * countOfNewBarrels * priceCount
         dialog.currentScore = currentScore
         dialog.barrelsCount = currentScore / priceCount
-        dialog.callback = object : LevelCompleteCallBack{
+        dialog.callback = object : LevelCompleteCallBack {
             override fun onClickGo() {
                 goNextLevel()
             }
@@ -137,13 +132,13 @@ class LevelOneActivity : AppCompatActivity() {
     }
 
     private fun gameStep(currentSeconds: Int) {
-        if (currentSeconds <= 0){
+        if (currentSeconds <= 0) {
             task.cancel()
             completeLevelHint()
             return
         }
 
-        if (currentSeconds % gameStepSeconds == 0){
+        if (currentSeconds % gameStepSeconds == 0) {
             removeBarrels()
             generateBarrels()
         }
@@ -153,13 +148,13 @@ class LevelOneActivity : AppCompatActivity() {
         timer_text.text = currentSeconds.toString()
     }
 
-    private fun generateBarrels(){
-        for (i in 1..countOfNewBarrels){
+    private fun generateBarrels() {
+        for (i in 1..countOfNewBarrels) {
             createBarrel()
         }
     }
 
-    fun soundEffect(){
+    fun soundEffect() {
         if (mp.isPlaying) {
             mp.stop()
         }
@@ -179,11 +174,11 @@ class LevelOneActivity : AppCompatActivity() {
 
     }
 
-    private fun removeBarrels(){
+    private fun removeBarrels() {
         if (barrells.isEmpty())
             return
 
-        for (i in 1..countOfNewBarrels){
+        for (i in 1..countOfNewBarrels) {
             val removeIndex = randomizer.nextInt(barrells.size)
             val barrel = barrells.keys.elementAt(removeIndex)
             removeItem(barrel)
@@ -191,10 +186,10 @@ class LevelOneActivity : AppCompatActivity() {
     }
 
     private fun removeItem(barrel: Barrel, view: View? = null) {
-        if (view == null){
+        if (view == null) {
             val findView = barrells[barrel]
             root_layout.removeView(findView)
-        }else{
+        } else {
             root_layout.removeView(view)
         }
         barrells.remove(barrel)
@@ -210,7 +205,7 @@ class LevelOneActivity : AppCompatActivity() {
         barrells.put(barrel, view)
     }
 
-    private fun createBarrelLottieView(barrel: Barrel) : View{
+    private fun createBarrelLottieView(barrel: Barrel): View {
         val itemHeight = resources.getDimensionPixelSize(R.dimen.barrel_height)
         val itemWidth = resources.getDimensionPixelSize(R.dimen.barrel_width);
 
@@ -239,7 +234,7 @@ class LevelOneActivity : AppCompatActivity() {
         return text_view
     }
 
-    private fun createBarrelImageView(barrel: Barrel) : View{
+    private fun createBarrelImageView(barrel: Barrel): View {
         val itemHeight = resources.getDimensionPixelSize(R.dimen.barrel_height)
         val itemWidth = resources.getDimensionPixelSize(R.dimen.barrel_width);
 
