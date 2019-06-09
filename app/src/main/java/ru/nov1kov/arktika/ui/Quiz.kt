@@ -20,6 +20,7 @@ open class Quiz : DialogFragment() {
 
     private lateinit var mp: MediaPlayer
     var callback: DialogCallBack? = null
+    private var countWrongAnswer : Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -58,6 +59,7 @@ open class Quiz : DialogFragment() {
     }
 
     private fun wrongAnswer() {
+        countWrongAnswer += 1
         if (context != null){
             mp.sound(context!!.assets.openFd("wrong_answer.mp3"))
         }
