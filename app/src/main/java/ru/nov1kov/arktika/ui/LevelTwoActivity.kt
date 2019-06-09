@@ -8,7 +8,6 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import com.airbnb.lottie.LottieAnimationView
 import kotlinx.android.synthetic.main.activity_level.*
 import ru.nov1kov.arktika.model.Barrel
 import com.bumptech.glide.Glide
@@ -246,35 +245,6 @@ class LevelTwoActivity : AppCompatActivity() {
         scaleView(view, 0.0f, 1.0f)
 
         barrells.put(barrel, view)
-    }
-
-    private fun createBarrelLottieView(barrel: Barrel): View {
-        val itemHeight = resources.getDimensionPixelSize(R.dimen.barrel_height)
-        val itemWidth = resources.getDimensionPixelSize(R.dimen.barrel_width);
-
-        val rndX = randomizer.nextInt(width - itemWidth)
-        val rndY = randomizer.nextInt(height - itemHeight)
-
-        val text_view = LottieAnimationView(this)
-
-        // Creating a LinearLayout.LayoutParams object for text view
-        val params: FrameLayout.LayoutParams = FrameLayout.LayoutParams(
-            itemWidth, // This will define text view width
-            itemHeight // This will define text view height
-        )
-        params.setMargins(rndX, rndY, 0, 0)
-        text_view.layoutParams = params
-
-        text_view.imageAssetsFolder = "images"
-        text_view.setAnimation("barrel.json")
-        text_view.loop(true)
-        text_view.playAnimation();
-        val barrelItem = barrel
-        text_view.setOnClickListener(View.OnClickListener {
-            doneBarrel(it, barrelItem)
-        })
-        root_layout.addView(text_view)
-        return text_view
     }
 
     private fun createBarrelImageView(barrel: Barrel): View {

@@ -20,6 +20,7 @@
             android:id="@+id/text"
             android:textColor="@color/colorHintText"
             android:textSize="14dp"
+            app:fontFamily="@font/open_sans_family"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:text="@string/start_game_hint"
