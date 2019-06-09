@@ -17,6 +17,7 @@ import android.media.MediaPlayer
 import android.content.res.AssetFileDescriptor
 import android.view.animation.*
 import ru.nov1kov.arktika.R
+import ru.nov1kov.arktika.utils.sound
 import java.io.IOException
 import java.lang.Exception
 
@@ -32,6 +33,7 @@ class LevelOneActivity : AppCompatActivity() {
     private var countOfNewBarrels: Int = 2
     private val timeLeftSeconds: Int = 25
     private val gameStepSeconds: Int = 2
+    private val quizGameStep: Int = 10
     private val priceCount: Int = 10
     private var currentSeconds: Int = 0
     private var currentScore: Int = 0
@@ -40,7 +42,7 @@ class LevelOneActivity : AppCompatActivity() {
 
     private val barrells: MutableMap<Barrel, View> = mutableMapOf()
 
-    private lateinit var task: TimerTask
+    private var task: TimerTask? = null
 
     private lateinit var mp: MediaPlayer
 
@@ -54,13 +56,7 @@ class LevelOneActivity : AppCompatActivity() {
         height = displayMetrics.heightPixels
         width = displayMetrics.widthPixels
 
-        root_layout.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        hideControls()
 
         Glide.with(this)
             .load(R.drawable.background_1)
@@ -80,6 +76,10 @@ class LevelOneActivity : AppCompatActivity() {
         if (isFailtShowDialog){
             completeLevelHint()
         }
+        hideControls()
+    }
+
+    private fun hideControls() {
         root_layout.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LOW_PROFILE or
                     View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -87,6 +87,48 @@ class LevelOneActivity : AppCompatActivity() {
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+    }
+
+    private fun showPrepareToQuizDialog(){
+        task?.cancel()
+        val dialog = PrepareToQuiz()
+        dialog.callback = object : DialogCallBack {
+            override fun start() {
+                showQuizDialog()
+            }
+            override fun back() {
+
+            }
+        }
+        dialog.isCancelable = false
+        dialog.show(supportFragmentManager, "PrepareToQuiz")
+    }
+
+    private fun showQuizDialog(){
+        val dialog = Quiz()
+        dialog.callback = object : DialogCallBack {
+            override fun start() {
+                hideControls()
+                resumeGame()
+            }
+            override fun back() {
+
+            }
+        }
+        dialog.isCancelable = false
+        dialog.show(supportFragmentManager, "Quiz_1")
+    }
+
+    private fun resumeGame() {
+        task = Timer().scheduleAtFixedRate(0, 1000) {
+            runOnUiThread {
+                if (!isDestroyed) {
+                    currentSeconds -= 1
+                    gameStep(currentSeconds)
+                    updateTimer()
+                }
+            }
+        }
     }
 
     private fun completeLevelHint() {
@@ -123,7 +165,7 @@ class LevelOneActivity : AppCompatActivity() {
     private fun showLevelHint() {
         val hint = StartLevelOneHint()
         hint.isCancelable = false
-        hint.callback = object : StartMissionCallBackDialog {
+        hint.callback = object : DialogCallBack {
             override fun back() {
                 finish()
             }
@@ -143,22 +185,18 @@ class LevelOneActivity : AppCompatActivity() {
         currentScore = 0
         currentSeconds = timeLeftSeconds
         updateTimer()
-        task = Timer().scheduleAtFixedRate(0, 1000) {
-            runOnUiThread {
-                if (!isDestroyed) {
-                    currentSeconds -= 1
-                    gameStep(currentSeconds)
-                    updateTimer()
-                }
-            }
-        }
+        resumeGame()
     }
 
     private fun gameStep(currentSeconds: Int) {
         if (currentSeconds <= 0) {
-            task.cancel()
+            task?.cancel()
             completeLevelHint()
             return
+        }
+
+        if (currentSeconds == quizGameStep){
+            showPrepareToQuizDialog()
         }
 
         if (currentSeconds % gameStepSeconds == 0) {
@@ -177,24 +215,8 @@ class LevelOneActivity : AppCompatActivity() {
         }
     }
 
-    fun soundEffect() {
-        if (mp.isPlaying) {
-            mp.stop()
-        }
-
-        try {
-            mp.reset()
-            val afd: AssetFileDescriptor
-            afd = assets.openFd("barrel_click.mp3")
-            mp.setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
-            mp.prepare()
-            mp.start()
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
+    private fun soundEffect() {
+        mp.sound(assets.openFd("barrel_click.mp3"))
     }
 
     private fun removeBarrels() {
@@ -291,6 +313,8 @@ class LevelOneActivity : AppCompatActivity() {
     }
 
     private fun doneBarrel(view: View, barrel: Barrel) {
+        if (barrel.done)
+            return
         barrel.done = true
         currentScore += priceCount
         updatePoints()

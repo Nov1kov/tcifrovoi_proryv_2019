@@ -7,19 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
 import androidx.fragment.app.DialogFragment
 import ru.nov1kov.arktika.R
 
 
-open class StartGameHint : DialogFragment(), OnClickListener {
+open class StartGameHint : DialogFragment() {
 
     internal val LOG_TAG = "StartGameHint"
 
-    var callback: StartMissionCallBackDialog? = null
+    var callback: DialogCallBack? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -39,11 +37,6 @@ open class StartGameHint : DialogFragment(), OnClickListener {
 
         val text = v.findViewById<View>(R.id.text)
         return v
-    }
-
-    override fun onClick(v: View) {
-        Log.d(LOG_TAG, "Dialog 1: " + (v as Button).text)
-        dismiss()
     }
 
     override fun onDestroy() {

@@ -59,7 +59,7 @@ class StartActivity : AppCompatActivity() {
     fun showStartGameExplainDialog(){
         val hint = StartGameHint()
         hint.isCancelable = false
-        hint.callback = object : StartMissionCallBackDialog {
+        hint.callback = object : DialogCallBack {
             override fun back() {
 
             }

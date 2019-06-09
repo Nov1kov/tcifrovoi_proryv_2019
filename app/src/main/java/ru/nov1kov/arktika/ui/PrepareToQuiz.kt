@@ -12,9 +12,9 @@ import androidx.fragment.app.DialogFragment
 import ru.nov1kov.arktika.R
 
 
-open class StartLevelTwoHint : DialogFragment() {
+open class PrepareToQuiz : DialogFragment() {
 
-    internal val LOG_TAG = "StartLevelOneHint"
+    internal val LOG_TAG = "PrepareToQuiz"
 
     var callback: DialogCallBack? = null
 
@@ -22,15 +22,10 @@ open class StartLevelTwoHint : DialogFragment() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.getWindow().setBackgroundDrawable( ColorDrawable(Color.TRANSPARENT))
 
-        val v = inflater.inflate(R.layout.mission_2_hint_fragment, null)
-        val start = v.findViewById<View>(R.id.go_button)
-        start.setOnClickListener {
+        val v = inflater.inflate(R.layout.prepare_to_quiz_fragment, null)
+        val ready = v.findViewById<View>(R.id.ready_button)
+        ready.setOnClickListener {
             callback?.start()
-            dismiss()
-        }
-        val back = v.findViewById<View>(R.id.back_button)
-        back.setOnClickListener {
-            callback?.back()
             dismiss()
         }
         return v

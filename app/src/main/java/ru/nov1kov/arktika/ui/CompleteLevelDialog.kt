@@ -21,7 +21,7 @@ interface LevelCompleteCallBack{
     fun onClickGo()
 }
 
-class CompleteLevelDialog : DialogFragment(), OnClickListener {
+class CompleteLevelDialog : DialogFragment() {
 
     internal val LOG_TAG = "StartLevelOneHint"
 
@@ -57,11 +57,6 @@ class CompleteLevelDialog : DialogFragment(), OnClickListener {
         barrels.text = barrelsCount.toString()
 
         return v
-    }
-
-    override fun onClick(v: View) {
-        Log.d(LOG_TAG, "Dialog 1: " + (v as Button).text)
-        dismiss()
     }
 
     override fun onDestroy() {
