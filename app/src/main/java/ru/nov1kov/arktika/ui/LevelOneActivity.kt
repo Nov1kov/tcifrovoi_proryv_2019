@@ -1,25 +1,25 @@
 package ru.nov1kov.arktika.ui
 
 import android.content.Intent
-import java.util.Random
-import androidx.appcompat.app.AppCompatActivity
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.BounceInterpolator
+import android.view.animation.ScaleAnimation
 import android.widget.FrameLayout
 import android.widget.ImageView
-import kotlinx.android.synthetic.main.activity_level.*
-import ru.nov1kov.arktika.model.Barrel
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.activity_level.*
+import ru.nov1kov.arktika.R
+import ru.nov1kov.arktika.model.Barrel
+import ru.nov1kov.arktika.utils.hideControls
+import ru.nov1kov.arktika.utils.sound
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
-import android.media.MediaPlayer
-import android.content.res.AssetFileDescriptor
-import android.view.animation.*
-import ru.nov1kov.arktika.R
-import ru.nov1kov.arktika.utils.sound
-import java.io.IOException
-import java.lang.Exception
 
 
 /**
@@ -80,13 +80,7 @@ class LevelOneActivity : AppCompatActivity() {
     }
 
     private fun hideControls() {
-        root_layout.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        root_layout.hideControls()
     }
 
     private fun showPrepareToQuizDialog(){

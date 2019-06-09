@@ -8,5 +8,5 @@
 
     <string name="prepare_to_quiz">Капитан должен ответить на вопрос, чтобы продолжить задание</string>
     <string name="quiz_1">Какая страна первой построила атомный ледокол?</string>
-    <string name="quiz_2">3</string>
+    <string name="donate_message">Спасибо что ознакомились с пробной версией нашей игры.\nОставьте свой отзыв и мы сделаем нашу игру лучше.</string>
 </resources>

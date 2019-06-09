@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_start.*
 import ru.nov1kov.arktika.R
+import ru.nov1kov.arktika.utils.hideControls
 
 class MapActivity : AppCompatActivity() {
 
@@ -17,15 +18,7 @@ class MapActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_map)
 
-
-        container.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-
+        container.hideControls()
 
         start.setOnClickListener {
             if (stageLevel == 1){
@@ -57,13 +50,7 @@ class MapActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        container.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        container.hideControls()
     }
 
     override fun onNewIntent(intent: Intent?) {
