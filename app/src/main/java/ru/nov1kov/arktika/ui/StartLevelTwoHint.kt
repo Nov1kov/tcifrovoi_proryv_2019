@@ -1,4 +1,4 @@
-package ru.novikov.arktika.ui
+package ru.nov1kov.arktika.ui
 
 import android.content.DialogInterface
 import android.graphics.Color
@@ -20,18 +20,14 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import ru.novikov.arktika.R
+import ru.nov1kov.arktika.R
 import java.util.*
 import kotlin.concurrent.schedule
 
-interface StartMissionCallBackDialog{
-    fun start()
-    fun back()
-}
 
-open class StartLevelHint : DialogFragment(), OnClickListener {
+open class StartLevelTwoHint : DialogFragment(), OnClickListener {
 
-    internal val LOG_TAG = "StartLevelHint"
+    internal val LOG_TAG = "StartLevelOneHint"
 
     var callback: StartMissionCallBackDialog? = null
 
@@ -39,7 +35,7 @@ open class StartLevelHint : DialogFragment(), OnClickListener {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.getWindow().setBackgroundDrawable( ColorDrawable(Color.TRANSPARENT))
 
-        val v = inflater.inflate(R.layout.mission_1_hint_fragment, null)
+        val v = inflater.inflate(R.layout.mission_2_hint_fragment, null)
         val start = v.findViewById<View>(R.id.go_button)
         start.setOnClickListener {
             callback?.start()
@@ -49,46 +45,6 @@ open class StartLevelHint : DialogFragment(), OnClickListener {
         back.setOnClickListener {
             callback?.back()
             dismiss()
-        }
-
-        val text = v.findViewById<View>(R.id.text)
-        text.visibility = INVISIBLE
-        val imageShip = v.findViewById<ImageView>(R.id.image_ship)
-
-        Glide.with(this)
-            .asGif()
-            .centerCrop()
-            .load(ru.novikov.arktika.R.raw.ship)
-            .listener(object : RequestListener<GifDrawable>{
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<GifDrawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    return true
-                }
-
-                override fun onResourceReady(
-                    resource: GifDrawable?,
-                    model: Any?,
-                    target: Target<GifDrawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    resource?.setLoopCount(1)
-                    return false
-                }
-
-            })
-            .into(imageShip);
-
-        Timer().schedule(5000) {
-            activity?.runOnUiThread {
-                imageShip.visibility = INVISIBLE
-                text.visibility = VISIBLE
-                text.startAnimation(AlphaAnimation(0.0f, 1.0f))
-            }
         }
         return v
     }

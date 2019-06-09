@@ -1,4 +1,4 @@
-package ru.novikov.arktika.ui
+package ru.nov1kov.arktika.ui
 
 import android.content.DialogInterface
 import android.graphics.Color
@@ -11,11 +11,9 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import ru.novikov.arktika.R
+import ru.nov1kov.arktika.R
 
 
 interface LevelCompleteCallBack{
@@ -25,7 +23,7 @@ interface LevelCompleteCallBack{
 
 class CompleteLevelDialog : DialogFragment(), OnClickListener {
 
-    internal val LOG_TAG = "StartLevelHint"
+    internal val LOG_TAG = "StartLevelOneHint"
 
     var callback: LevelCompleteCallBack? = null
     var maxScore: Int = 1

@@ -1,4 +1,4 @@
-package ru.novikov.arktika.ui
+package ru.nov1kov.arktika.ui
 
 import android.content.Intent
 import java.util.Random
@@ -10,17 +10,16 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import com.airbnb.lottie.LottieAnimationView
 import kotlinx.android.synthetic.main.activity_level.*
-import ru.novikov.arktika.model.Barrel
+import ru.nov1kov.arktika.model.Barrel
 import com.bumptech.glide.Glide
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
 import android.media.MediaPlayer
 import android.content.res.AssetFileDescriptor
 import android.view.animation.*
-import ru.novikov.arktika.R
+import ru.nov1kov.arktika.R
 import java.io.IOException
 import java.lang.Exception
-import java.text.DecimalFormat
 
 
 /**
@@ -32,7 +31,7 @@ class LevelOneActivity : AppCompatActivity() {
     private var width: Int = 0
 
     private var countOfNewBarrels: Int = 2
-    private val timeLeftSeconds: Int = 3
+    private val timeLeftSeconds: Int = 25
     private val gameStepSeconds: Int = 2
     private val priceCount: Int = 10
     private var currentSeconds: Int = 0
@@ -123,7 +122,7 @@ class LevelOneActivity : AppCompatActivity() {
     }
 
     private fun showLevelHint() {
-        val hint = StartLevelHint()
+        val hint = StartLevelOneHint()
         hint.isCancelable = false
         hint.callback = object : StartMissionCallBackDialog {
             override fun back() {
@@ -134,7 +133,7 @@ class LevelOneActivity : AppCompatActivity() {
                 startGame()
             }
         }
-        hint.show(supportFragmentManager, "StartLevelHint")
+        hint.show(supportFragmentManager, "StartLevelOneHint")
     }
 
     private fun startGame() {

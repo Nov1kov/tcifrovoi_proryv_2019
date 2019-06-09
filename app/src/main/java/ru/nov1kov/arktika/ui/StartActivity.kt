@@ -1,4 +1,4 @@
-package ru.novikov.arktika.ui
+package ru.nov1kov.arktika.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_start.*
-import ru.novikov.arktika.R
+import ru.nov1kov.arktika.R
 
 class StartActivity : AppCompatActivity() {
 
@@ -40,7 +40,7 @@ class StartActivity : AppCompatActivity() {
         }
 
         Glide.with(this)
-            .load(ru.novikov.arktika.R.drawable.start_screen_background)
+            .load(ru.nov1kov.arktika.R.drawable.start_screen_background)
             .centerCrop()
             .into(background);
     }
@@ -68,7 +68,7 @@ class StartActivity : AppCompatActivity() {
                 startGame()
             }
         }
-        hint.show(supportFragmentManager, "StartLevelHint")
+        hint.show(supportFragmentManager, "StartLevelOneHint")
     }
 
     private fun startGame() {

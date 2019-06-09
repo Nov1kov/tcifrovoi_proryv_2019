@@ -1,4 +1,4 @@
-package ru.novikov.arktika.model
+package ru.nov1kov.arktika.model
 
 data class Barrel(
     val id: String,

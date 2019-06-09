@@ -1,4 +1,4 @@
-package ru.novikov.arktika.ui
+package ru.nov1kov.arktika.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_start.*
-import ru.novikov.arktika.R
+import ru.nov1kov.arktika.R
 
 class MapActivity : AppCompatActivity() {
 
@@ -31,8 +31,9 @@ class MapActivity : AppCompatActivity() {
             if (stageLevel == 1){
                 val intent = Intent(this, LevelOneActivity::class.java)
                 startActivity(intent)
-            }else{
-
+            }else if (stageLevel == 2){
+                val intent = Intent(this, LevelTwoActivity::class.java)
+                startActivity(intent)
             }
         }
         stageLevel = intent.getIntExtra("MAP_ACTIVITY_STAGE_KEY", 0)

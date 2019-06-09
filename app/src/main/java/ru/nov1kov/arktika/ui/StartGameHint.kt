@@ -1,4 +1,4 @@
-package ru.novikov.arktika.ui
+package ru.nov1kov.arktika.ui
 
 import android.content.DialogInterface
 import android.graphics.Color
@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import androidx.fragment.app.DialogFragment
-import ru.novikov.arktika.R
+import ru.nov1kov.arktika.R
 
 
 open class StartGameHint : DialogFragment(), OnClickListener {
